@@ -1,2 +1,236 @@
 I created this Go Fish game in Python as part of the summer RootTech program.
 https://repl.it/join/oqafslaw-krivera30
+
+#Roottech Final Project
+#Kaylani Rivera
+
+#imports
+import random
+import time
+
+#list of all cards
+allcards = ['Ace of clubs', '2 of clubs',	'3 of clubs',	'4 of clubs',	'5 of clubs',	'6 of clubs',	'7 of clubs',	'8 of clubs',	'9 of clubs',	'10 of clubs', 'Jack of clubs',	'Queen of clubs', 'King of clubs', 'Ace of diamonds',	'2 of diamonds', '3 of diamonds',	'4 of diamonds', '5 of diamonds', '6 of diamonds', '7 of diamonds',	'8 of diamonds', '9 of diamonds', '10 of diamonds', 'Jack of diamonds', 'Queen of diamonds', 'King of diamonds', 'Ace of hearts', '2 of hearts', '3 of hearts', '4 of hearts', '5 of hearts', '6 of hearts', '7 of hearts', '8 of hearts', '9 of hearts', '10 of hearts', 'Jack of hearts',	'Queen of hearts', 'King of hearts', 'Ace of spades', '2 of spades',	'3 of spades', '4 of spades', '5 of spades', '6 of spades',	'7 of spades', '8 of spades',	'9 of spades', '10 of spades', 'Jack of spades',	'Queen of spades', 'King of spades']
+
+#list of player's cards, starts at none
+user = []
+comp1 = []
+comp2 = []
+
+#deals 5 cards to players
+def begindraw(player):
+  for i in range(5):
+    card = (allcards[random.randint(0,len(allcards)-1)])
+    player.append(card)
+    allcards.remove(card)
+
+#lets one player draw a card
+def drawcard(player):
+  card = (allcards[random.randint(0,len(allcards)-1)])
+  player.append(card)
+  allcards.remove(card)
+  time.sleep(1)
+  print('\n"Go Fish!"')
+  if player == user:
+    print("You drew a", card, "from the deck.")
+  elif player == comp1:
+    print("Player 2 drew a card from the deck.")
+  elif player == comp2:
+    print("Player 3 drew a card from the deck.")
+  time.sleep(2)
+
+#makes cards chosen by computer only have the rank as well as helps with scorekeeping
+def rankcheck(card):
+  if card.endswith('of clubs'):
+      rank = card.replace(' of clubs', '')
+  elif card.endswith('of diamonds'):
+    rank = card.replace(' of diamonds', '')
+  elif card.endswith('of hearts'):
+    rank = card.replace(' of hearts', '')
+  elif card.endswith('of spades'):
+    rank = card.replace(' of spades', '')
+  return rank
+
+#checks if player has card
+def cardcheck(fisher, fishee):
+  if fisher == comp1:
+    fishername = "Player 2"
+  elif fisher == comp2:
+    fishername = "Player 3"
+  if fishee == "comp1":
+    fisheename = "Player 2"
+    fishee = comp1
+  elif fishee == "comp2":
+    fisheename = "Player 3"
+    fishee = comp2
+  elif fishee == "user":
+    fisheename = "you"
+    fishee = user
+  else:
+    print("\nSomething went wrong when you typed who you were asking. Please restart.\n")
+  if fisher == user:
+    print("\nPlease select a rank to ask the player about. If it is a number just type the number and if it is Ace, Jack, Queen, or King, please capitalize it. Please only select a rank you have. ")
+    card = input("Rank chosen: ")
+    if card+' of clubs' in fishee:
+      print("\nYou took the", card, "of clubs", "from", fisheename)
+      fishee.remove(card+' of clubs')
+      fisher.append(card+' of clubs')
+    if card+' of diamonds' in fishee:
+      print("\nYou took the", card, "of diamonds", "from", fisheename)
+      fishee.remove(card+' of diamonds')
+      fisher.append(card+' of diamonds')
+    if card+' of hearts' in fishee:
+      print("\nYou took the", card, "of hearts", "from", fisheename)
+      fishee.remove(card+' of hearts')
+      fisher.append(card+' of hearts')
+    if card+' of spades' in fishee:
+      print("\nYou took the", card, "of spades", "from", fisheename)
+      fishee.remove(card+' of spades')
+      fisher.append(card+' of spades')
+  else:
+    print("\n", "\n")
+    print(fishername, "is fishing.")
+    card = (fisher[random.randint(0,len(fisher)-1)])
+    time.sleep(2)
+    rank = rankcheck(card)
+    print(rank, "has been selected by", fishername)
+    print(fishername, "has decided to ask", fisheename)
+    if rank+' of clubs' in fishee:
+      print(fishername, "took the", rank, "of clubs", "from", fisheename)
+      fishee.remove(rank+' of clubs')
+      fisher.append(rank+' of clubs')
+    if rank+' of diamonds' in fishee:
+      print(fishername, "took the", rank, "of diamonds", "from", fisheename)
+      fishee.remove(rank+' of diamonds')
+      fisher.append(rank+' of diamonds')
+    if rank+' of hearts' in fishee:
+      print(fishername, "took the", rank, "of hearts", "from", fisheename)
+      fishee.remove(rank+' of hearts')
+      fisher.append(rank+' of hearts')
+    if rank+' of spades' in fishee:
+      print(fishername, "took the", rank, "of spades", "from", fisheename)
+      fishee.remove(rank+' of spades')
+      fisher.append(rank+' of spades')
+
+#decides who the computers ask
+def fisheecheck(comp):
+  x = random.randint(1,2)
+  if x == 1:
+    fishee = "user"
+  elif comp == comp1:
+    fishee = "comp2"
+  elif comp == comp2:
+    fishee = "comp1"
+  return fishee
+
+#counts the final score once all the cards have been picked up
+def scorecheck(player):
+  score = 0
+  #card = ""
+  #card2 = ""
+  #for i in range(len(player)-2) <------
+  #this is done because biggest index in a list = len - 1, but you are using i+1 in there, which will make it be so that at the highest index, you can still go one above.
+  #ex of the above: list of 5 items, largest index is 4. player[i+1] still needs to exist, which it wont if i is ever equal to 4, max i value should be 3 in this example
+  for i in range(len(player)):
+    card = player[i]
+    #define card ahead of time, you can't define it for the first time in a loop
+    #you should only haave 1 for loop
+    #create variable card2 before you enter the first for loop as:
+    #card2 = player[i+1]
+    for x in range(len(player)):
+      card2 = player[x]
+      #put the if in this loop and erase the second loop.
+      if card[0] == card2[0]:
+        score += 1
+  return score
+
+#beginning message
+time.sleep(1)
+print("Welcome to Go Fish!")
+time.sleep(2)
+
+#all players draw first cards
+begindraw(user)
+begindraw(comp1)
+begindraw(comp2)
+
+#makes winner equal to 0, starts loop
+winner = 0
+
+#main code, loops until someone wins or all cards are gone
+while winner == 0:
+  #user fishing
+  if len(user) != 0:
+    x = len(user)
+    time.sleep(2)
+    print("\nYou are fishing.")
+    #prints user's cards each time
+    print("Your cards are:")
+    for i in range(len(user)):
+      time.sleep(1)
+      print(user[i])
+    print("\nWhich player would you like to ask?")
+    fishee = input("Type 'comp1' for Player 2 and 'comp2' for Player 3. ")
+    cardcheck(user, fishee)
+    time.sleep(2)
+  #makes user draw card if they did not get any cards from the player selected
+  if x == len(user) and len(allcards) != 0:
+    drawcard(user)
+  time.sleep(3)
+  #comp1 fishing
+  if len(comp1) != 0:
+    x = len(comp1)
+    cardcheck(comp1, fisheecheck(comp1))
+    time.sleep(2)
+    #makes player 2 draw card if they did not get any cards from the player selected
+    if x == len(comp1) and len(allcards) != 0:
+      drawcard(comp1)
+    time.sleep(3)
+  #comp2 fishing
+  if len(comp2) != 0:
+    x = len(comp2)
+    cardcheck(comp2, fisheecheck(comp2))
+    time.sleep(2)
+    #makes player 3 draw card if they did not get any cards from the player selected
+    if x == len(comp2) and len(allcards) != 0:
+      drawcard(comp2)
+  time.sleep(5)
+  print("\n \n")
+  #calculates final score once the deck runs out of cards
+  if len(allcards) == 0:
+    print("\nThe draw pile has run out of cards. The winner will now be announced based on how many cards of each rank you have. Two count as one point, three count as two points, and four count as three points.")
+    print("\nYour final cards were:")
+    for i in range(len(user)):
+      time.sleep(1)
+      print(user[i])
+    print("\nPlayer 2's final cards were:")
+    for i in range(len(comp1)):
+      time.sleep(1)
+      print(comp1[i])
+    print("\nAnd Player 3's final cards were:")
+    for i in range(len(comp2)):
+      time.sleep(1)
+      print(comp2[i])
+    time.sleep(1)
+    userscore = scorecheck(user)
+    comp1score = scorecheck(comp1)
+    comp2score = scorecheck(comp2)
+    print("\nYour score was",userscore, ", Player 2's score was", comp1score, ", and Player 3's score was", comp2score)
+    time.sleep(1)
+    if userscore > comp1score and userscore > comp2score:
+      winner = 1
+    elif comp1score > userscore and comp1score > comp2score:
+      winner = 2
+    elif comp1score > userscore and comp2score > comp1score:
+      winner = 3
+    else:
+      winner = 4
+
+#ending message, based on who won
+if winner == 1:
+  print("\nYou won! Congratulations!")
+elif winner == 2:
+  print("\nPlayer 2 won. Better luck next time.")
+elif winner == 3:
+  print("\nPlayer 3 won. Better luck next time.")
+else:
+  print("\nNoone won. Better luck next time.")
