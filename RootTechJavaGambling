@@ -1,2 +1,116 @@
 I created this gambling game in Java as part of the summer RootTech program.
 https://repl.it/join/nxbpoqxl-krivera30
+
+//Gambling Game: Kaylani Rivera
+
+//imports array lists and scanners
+import java.util.ArrayList;
+import java.util.Scanner;
+
+//begins main class
+class Main {
+  
+  //arrays and variables
+  static ArrayList<Integer> allnums = new ArrayList<>();
+  static ArrayList<Integer> winnums = new ArrayList<>();
+  static ArrayList<Integer> usednums = new ArrayList<>();
+  static int balance = 10;
+  static Scanner x = new Scanner(System.in);
+  static int count = 0;
+
+  //main method
+  public static void main(String[] args) {
+    //adds numbers 1-80 to all numbers
+    for (int i=1; i<81; i++){
+      allnums.add(i);
+    }
+    //decides winning numbers
+    while(winnums.size() < 20 ) {
+            int rand = (int)(Math.random()*80 + 1);
+            if(!winnums.contains(rand)) {
+                winnums.add(rand);
+            }
+          }
+
+    //intro message
+    System.out.print("\nHello! Welcome to my gambling game.");
+
+    //main code (loop)
+    while(balance != 0 && balance < 100){
+      //adds to the count each interation (count checks how many bets have been placed since the last shuffling of the winning numbers)
+      count++;
+      //shuffles winning numbers if 10 bets have been placed
+      if(count == 11){
+        System.out.print("\n\nYou have bet 10 times without shuffling the numbers. They will now be automatically shuffled.");
+        while(winnums.size() != 0){
+          winnums.remove(0);
+        }
+        while(winnums.size() < 20 ) {
+                int rand = (int)(Math.random()*80 + 1);
+                if(!winnums.contains(rand)) {
+                    winnums.add(rand);
+                }
+        }
+        while(usednums.size() != 0){
+          usednums.remove(0);
+        }
+        count = 0;
+      }
+      //intro message
+      System.out.print("\n\n\nYou may bet on any number from 1-80. Only 20 of those numbers are winning numbers. It costs $1 to bet. If you win, you receive $5. You may not bet on the same number more than once. When betting, if you play a 0 then the winning numbers will be shuffled and the numbers you played will reset. This will happen automatically after 10 bets of you not choosing to shuffle. Your balance will remain the same if the winning numbers are shuffled. The game ends when you either run out of money or have earned a total of $100. \n\nYour current balance is: $" + balance);
+      //subtracts 1 from balance to bet
+      balance--;
+      //user input for bet
+      System.out.println("\n\nEnter a number to bet on it: ");
+      int bet = x.nextInt();
+      System.out.print("\n");
+      //checks if you win or lose (or if you decided to shuffle the numbers)
+      if(!usednums.contains(bet) && bet <= 80 && bet > 0) {
+        if(winnums.contains(bet)){
+          System.out.print(bet + " is one of the winning numbers! Congratulations!");
+          balance += 5;
+        }
+        else{
+          System.out.print(bet + " was not one of the numbers. Better luck next time.");
+        }
+        usednums.add(bet);
+      }
+      else if(bet == 0){
+        System.out.print("\nYou have decided to shuffle the winning numbers.");
+        while(winnums.size() != 0){
+          winnums.remove(0);
+        }
+        while(winnums.size() < 20 ) {
+                int rand = (int)(Math.random()*80 + 1);
+                if(!winnums.contains(rand)) {
+                    winnums.add(rand);
+                }
+        }
+        while(usednums.size() != 0){
+          usednums.remove(0);
+        }
+        balance++;
+        count = 0;
+      }
+      else if(bet > 80 || bet < 0){
+         System.out.print("\nYou have selected a number outside of the designated 1-80 range.");
+         balance++;
+       }
+      else{
+        System.out.print("\nYou have already selected that number.");
+        balance ++;
+      }
+    }
+    //ending message based on if you win or lose
+    if(balance >= 100){
+      System.out.print("\n\nCongratulations, you reached $100! You win!!!");
+    }
+    else if(balance == 0){
+      System.out.print("\n\nOh no! You have no more money. Try again!");
+    }
+    //print statement just in case the code worked incorrectly
+    else{
+      System.out.print("\n\nSomething went wrong. Please rerun the code.");
+    }
+  }
+}
