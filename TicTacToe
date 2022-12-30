@@ -1,0 +1,167 @@
+This is an interactive tictactoe game I made in APCSA to practice 2D Arrays.
+
+import java.util.Scanner;
+
+public class TicTacToeTester
+{
+    public static void main(String[] args)
+    {
+        Scanner input = new Scanner(System.in);
+        TicTacToe game = new TicTacToe();
+        System.out.println("You will select the row and column for each move, beginning with X!");
+        while(game.checkWin() == false && game.validSpaceLeft() == true)
+        {
+            System.out.print("Select the row: ");
+            int row = input.nextInt();
+            System.out.print("Select the column: ");
+            int col = input.nextInt();
+            if(game.pickLocation(row, col))
+            {
+                game.takeTurn(row, col);
+                game.printBoard();
+            }
+            else
+            {
+                System.out.println("Invalid space, try again.");
+            }
+        }
+        System.out.println("The game is over!");
+        game.printBoard();
+        if(game.checkWin() == false && game.validSpaceLeft() == false)
+        {
+            System.out.println("There is a tie!");
+        }
+        else if(game.getTurn()%2 == 1)
+        {
+            System.out.println("X has won!");
+        }
+        else
+        {
+            System.out.println("O has won!");
+        }
+    }
+}
+
+public class TicTacToe
+{
+   private int turn;
+   String[][] board = new String[3][3];
+    
+    public TicTacToe()
+    {
+        board[0] = new String[]{"-", "-", "-"};
+        board[1] = new String[]{"-", "-", "-"};
+        board[2] = new String[]{"-", "-", "-"};
+    }
+   
+   //this method returns the current turn
+   public int getTurn()
+   {
+       return turn;
+   }
+   
+   /*This method prints out the board array on to the console
+   */
+   public void printBoard()
+   {
+       System.out.println("  0 1 2");
+       for(int i = 0; i < 3; i++)
+       {
+            System.out.println(i + " " + board[i][0] + " " + board[i][1] + " " + board[i][2]);
+       }
+   }
+   
+   //This method returns true if space row, col is a valid space
+   public boolean pickLocation(int row, int col)
+   {
+       if(row < 3 && col < 3 && board[row][col].equals("-"))
+       {
+           return true;
+       }
+       return false;
+   }
+   
+   //This method places an X or O at location row,col based on the int turn
+   public void takeTurn(int row, int col)
+   {
+       if(pickLocation(row, col))
+       {
+           if(getTurn()%2 == 0)
+           {
+               board[row][col] = "X";
+               turn++;
+           }
+           else
+           {
+               board[row][col] = "O";
+               turn++;
+           }
+       }
+   }
+   
+   //This method returns a boolean that returns true if a row has three X or O's in a row
+   public boolean checkRow()
+   {
+       for(String[]row: board)
+       {
+           if(!row[0].equals("-") && row[0].equals(row[1]) && row[0].equals(row[2]))
+           {
+               return true;
+           }
+       }
+       return false;
+   }
+   
+    //This method returns a boolean that returns true if a col has three X or O's
+   public boolean checkCol()
+   {
+       for(int col = 0; col < 3; col++)
+       {
+           if(!board[0][col].equals("-") && board[0][col].equals(board[1][col]) && board[0][col].equals(board[2][col]))
+           {
+                return true;
+           }
+       }
+       return false;
+   }
+   
+    //This method returns a boolean that returns true if either diagonal has three X or O's
+   public boolean checkDiag()
+   {
+       if(!board[0][0].equals("-") && board[0][0].equals(board[1][1]) && board[0][0].equals(board[2][2]))
+       {
+           return true;
+       }
+       else if(!board[0][2].equals("-") && board[0][2].equals(board[1][1]) && board[0][2].equals(board[2][0]))
+       {
+           return true;
+       }
+       return false;
+   }
+   
+   public boolean validSpaceLeft()
+   {
+       for(String[] array: board)
+       {
+           for(String space: array)
+           {
+               if(space.equals("-"))
+               {
+                   return true;
+               }
+           }
+       }
+       return false;
+   }
+   
+   //This method returns a boolean that checks if someone has won the game
+   public boolean checkWin()
+   {
+        if(checkRow() || checkCol() || checkDiag())
+        {
+            return true;
+        }
+        return false;
+   }
+
+}
