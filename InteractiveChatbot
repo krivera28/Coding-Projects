@@ -1,0 +1,51 @@
+This is a chatbot I created while leading my clubs through coding tutorials!
+Link: https://replit.com/@krivera30/InteractiveChatbot#main.py
+
+import random
+
+greetings = ["Welcome to my Chatbot!", "Hey! How are you?", "Hello, nice to meet you!"]
+
+responses = {
+    "name": "My name is Kay!",
+    "old" or "age": "I'm 17 years old.",
+    "movie": "My favorite movie is Megamind.",
+    "book" or "read" or "reading": "The Girl On the Train is an amazing story, you should read it!",
+    "food": "Barbeque chicken pizza is the best food ever!",
+    "music": "I like alternative music the most but sometimes I listen to pop.",
+    "free time": "In my free time, I like playing video games and hanging out with friends!",
+    "pets": "I don't have any right now, but I want a dog in the future!",
+    "TV show": "My favorite TV show is Cobra Kai!",
+    "sports": "I play golf at my school but I also played soccer when I was younger.",
+    "siblings": "Yes, I have an older sister.",
+    "animal": "I love sugar gliders. They're so cute and have big eyes!",
+    "place": "I love going to the mall or park with friends!",
+  "future career" or "grow up": "I want to be a game developer!",
+    "hobbies": "My main hobbies are playing video games, reading, and coding!"
+}
+
+exit_statements = ["goodbye", "bye", "quit", "I have to go", "leave", "exit"]
+
+memory = []
+
+def respond(message):
+    if message[-1] == "?":
+        for response in responses:
+            if response in message.lower():
+                return responses[response]
+        for item in memory:
+            if item in message.lower():
+                return "I think you mentioned that before when you said \"" + item + "\" "
+        return "I'm not sure what you mean. Can you rephrase that?"
+    if any(exit_statement in message.lower() for exit_statement in exit_statements):
+        return "Bye, it was nice chatting with you!"
+    else:
+        memory.append(message)
+        return "I'm not sure what you mean. If you are trying to ask a question, please end it with a question mark!"
+
+print(random.choice(greetings) + " You can ask me about a ton of different things, like my name, favorite things to do, and future career!")
+while True:
+    message = input("You: ")
+    response = respond(message)
+    print("Me: " + response)
+    if any(exit_statement in message.lower() for exit_statement in exit_statements):
+        break
